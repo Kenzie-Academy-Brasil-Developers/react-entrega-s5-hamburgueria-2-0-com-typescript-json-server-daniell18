@@ -45,6 +45,7 @@ export const CartProvider = ({ children }: UserProps) => {
         x.push(cart[i]);
       }
       setCart(x);
+      localStorage.setItem("@BurguerKenzie:Cart", JSON.stringify(x));
     }
   };
   const rmvCart = (item: itemProps, setIsAtt: any) => {
@@ -58,16 +59,21 @@ export const CartProvider = ({ children }: UserProps) => {
       }
       setCart(x);
       setIsAtt(false);
+      localStorage.setItem("@BurguerKenzie:Cart", JSON.stringify(x));
     }
 
     if (item.quantity < 1) {
       console.log("here");
       let y = cart.filter((product: itemProps) => product.id !== item.id);
       setCart(y);
+      localStorage.setItem("@BurguerKenzie:Cart", JSON.stringify(y));
     }
   };
   const clearItem = (item: itemProps) => {
-    setCart(cart.filter((product: itemProps) => product.id !== item.id));
+    console.log("teste");
+    let aux = cart.filter((product: itemProps) => product.id !== item.id);
+    setCart(aux);
+    localStorage.setItem("@BurguerKenzie:Cart", JSON.stringify(aux));
   };
 
   return (

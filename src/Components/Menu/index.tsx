@@ -11,19 +11,54 @@ import { FaSearch } from "react-icons/fa";
 import { useHistory } from "react-router";
 import { useState } from "react";
 import { useCart } from "../../Provider/Cart";
-import { ContainerAlt, ContainerCart, ContainerQtd, NumberQtd } from "./style";
+import {
+  ContainerAlt,
+  ContainerCart,
+  ContainerQtd,
+  ContainerTitle,
+  NumberCart,
+  NumberQtd,
+} from "./style";
 
-export const Menu = () => {
+interface itemProps {
+  title: string;
+  price: number;
+  type: string;
+  img: string;
+  id: number;
+  quantity: number;
+}
+
+export const Menu = ({ setListFilter, setIsOnSearch, catalogue }: any) => {
   const [isAtt, setIsAtt] = useState(true);
   const history = useHistory();
   const [open, setOpen] = useState(false);
-  const { cart, addCart, rmvCart, clearItem } = useCart();
-  console.log(cart);
 
-  const list = localStorage.getItem("@BurguerKenzie:Cart")
+  const [search, setSearch] = useState("");
+  const { cart, addCart, rmvCart, clearItem } = useCart();
+
+  let list = localStorage.getItem("@BurguerKenzie:Cart")
     ? JSON.parse(localStorage.getItem("@BurguerKenzie:Cart") || "")
     : cart;
+  const handleClick = () => {
+    console.log(search.length);
+    if (search.length === 0) {
+      setIsOnSearch(false);
+    } else {
+      console.log(catalogue);
+      let aux = catalogue.filter(
+        (element: itemProps) =>
+          element.title
+            .split("")
+            .slice(0, search.length)
+            .join("")
+            .toLocaleLowerCase() === search.toLocaleLowerCase()
+      );
 
+      setListFilter(aux);
+      setIsOnSearch(true);
+    }
+  };
   return (
     <>
       <Flex
@@ -51,6 +86,7 @@ export const Menu = () => {
               bgColor="#27aE60"
               border="1px solid #27aE60"
               borderRadius="6px"
+              onClick={() => handleClick()}
             >
               <FaSearch />
             </Button>
@@ -61,11 +97,13 @@ export const Menu = () => {
             width="100%"
             variant="outline"
             placeholder="Pesquisar"
+            onChange={(e) => setSearch(e.target.value)}
           />
         </InputGroup>
 
         <Box display="flex" justifyContent="center" alignItems="center">
-          <Box padding="7px">
+          <Box padding="7px" display="flex">
+            <NumberCart>{list.length}</NumberCart>
             <BsFillCartFill
               onClick={() => setOpen(true)}
               size={25}
@@ -83,17 +121,19 @@ export const Menu = () => {
         </Box>
       </Flex>
       <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-        <h2>Carrinho</h2>
-        <h4>
-          Total:R$
-          {cart
-            .reduce((acc, total) => acc + total.price, 0)
-            .toFixed(2)
-            .toLocaleString()}
-        </h4>
+        <ContainerTitle>
+          <h2>Carrinho</h2>
+          <h4>
+            Total:R$
+            {cart
+              .reduce((acc, total) => acc + total.price * total.quantity, 0)
+              .toFixed(2)
+              .toLocaleString()}
+          </h4>
+        </ContainerTitle>
         {isAtt ? (
           <div>
-            {list.map((product: any, index: number) => (
+            {list.map((product: itemProps, index: number) => (
               <ContainerCart key={index}>
                 <img src={product.img} alt={product.title} />
                 <ContainerAlt>
@@ -112,7 +152,7 @@ export const Menu = () => {
           </div>
         ) : (
           <div>
-            {list.map((product: any, index: number) => (
+            {list.map((product: itemProps, index: number) => (
               <ContainerCart key={index}>
                 <img src={product.img} alt={product.title} />
                 <ContainerAlt>

@@ -39,3 +39,20 @@ export const ContainerAlt = styled.div`
     text-align: center;
   }
 `;
+export const ContainerTitle = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+export const NumberCart = styled.div`
+  background-color: orange;
+  color: white;
+  height: 15px;
+  width: 15px;
+  font-size: 12px;
+  border-radius: 10px;
+  position: relative;
+  left: 30px;
+  top: 20px;
+`;
