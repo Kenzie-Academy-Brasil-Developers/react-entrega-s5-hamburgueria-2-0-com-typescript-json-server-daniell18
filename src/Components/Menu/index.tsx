@@ -93,8 +93,8 @@ export const Menu = () => {
         </h4>
         {isAtt ? (
           <div>
-            {list.map((product: any) => (
-              <ContainerCart>
+            {list.map((product: any, index: number) => (
+              <ContainerCart key={index}>
                 <img src={product.img} alt={product.title} />
                 <ContainerAlt>
                   <p>{product.title}</p>
@@ -112,8 +112,8 @@ export const Menu = () => {
           </div>
         ) : (
           <div>
-            {list.map((product: any) => (
-              <ContainerCart>
+            {list.map((product: any, index: number) => (
+              <ContainerCart key={index}>
                 <img src={product.img} alt={product.title} />
                 <ContainerAlt>
                   <p>{product.title}</p>
